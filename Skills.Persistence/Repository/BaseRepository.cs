@@ -8,7 +8,7 @@ namespace Skills.Persistence.Repository;
 public class BaseRepository<TEntity>(SkillsContext skillsContext) : IBaseRepository<TEntity>
     where TEntity : BaseEntity
 {
-    private readonly SkillsContext context = skillsContext;
+    protected readonly SkillsContext context = skillsContext;
 
 
     public void Create(TEntity entity)
