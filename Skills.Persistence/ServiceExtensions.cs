@@ -13,7 +13,7 @@ namespace Skills.Persistence;
 
 public static class ServiceExtensions
 {
-    public static void ConfigureExtensions(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigurePersistence(this IServiceCollection services, IConfiguration configuration)
     {
         var connection = configuration.GetConnectionString("SkillsContext");
         services.AddDbContext<SkillsContext>(opt => opt.UseSqlServer(connection));
