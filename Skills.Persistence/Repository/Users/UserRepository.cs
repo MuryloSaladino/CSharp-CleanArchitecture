@@ -12,4 +12,9 @@ public class UserRepository(SkillsContext skillsContext) : BaseRepository<User>(
             .Set<User>()
             .Where(user => user.Skills.Any(skill => skill.Name == skillName))
             .ToListAsync(cancellationToken);
+
+    public Task<User?> GetByUsername(string username, CancellationToken cancellationToken)
+        => context
+            .Set<User>()
+            .FirstOrDefaultAsync(user => user.Username == username, cancellationToken);
 }
