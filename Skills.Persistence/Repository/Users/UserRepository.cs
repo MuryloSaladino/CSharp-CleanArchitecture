@@ -11,5 +11,5 @@ public class UserRepository(SkillsContext skillsContext) : BaseRepository<User>(
         => context
             .Set<User>()
             .Where(user => user.Skills.Any(skill => skill.Name == skillName))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 }
