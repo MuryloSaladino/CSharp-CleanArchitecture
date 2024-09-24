@@ -11,5 +11,5 @@ public class SkillRepository(SkillsContext skillsContext) : BaseRepository<Skill
         => context
             .Set<Skill>()
             .Where(skill => skill.Level >= level)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 }
