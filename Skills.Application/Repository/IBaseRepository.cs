@@ -8,6 +8,6 @@ public interface IBaseRepository<TEntity>
     void Create(TEntity entity);
     void Update(TEntity entity);
     void Delete(TEntity entity);
-    Task<TEntity> Get(Guid id, CancellationToken cancellationToken);
+    Task<TEntity?> Get(Guid id, CancellationToken cancellationToken);
     Task<List<TEntity>> GetAll(CancellationToken cancellationToken);
 }
