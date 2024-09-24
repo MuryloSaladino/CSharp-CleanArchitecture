@@ -24,5 +24,6 @@ dataContext?.Database.EnsureCreated();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors();
+app.UserErrorHandler();
 app.MapControllers();
 app.Run();
