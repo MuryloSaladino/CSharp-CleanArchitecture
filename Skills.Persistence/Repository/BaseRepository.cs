@@ -12,28 +12,20 @@ public class BaseRepository<TEntity>(SkillsContext skillsContext) : IBaseReposit
 
 
     public void Create(TEntity entity)
-    {
-        context.Add(entity);
-    }
+        => context.Add(entity);
 
     public void Update(TEntity entity)
-    {
-        context.Update(entity);
-    }
+        => context.Update(entity);
+
+    public Task<TEntity?> Get(Guid id, CancellationToken cancellationToken)
+        => context.Set<TEntity>().FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
+
+    public Task<List<TEntity>> GetAll(CancellationToken cancellationToken)
+        => context.Set<TEntity>().ToListAsync(cancellationToken);
 
     public void Delete(TEntity entity)
     {
         entity.DeletedAt = DateTime.Now;
         context.Update(entity);
-    }
-
-    public Task<TEntity?> Get(Guid id, CancellationToken cancellationToken)
-    {
-        return context.Set<TEntity>().FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
-    }
-
-    public Task<List<TEntity>> GetAll(CancellationToken cancellationToken)
-    {
-        return context.Set<TEntity>().ToListAsync(cancellationToken);
     }
 }
