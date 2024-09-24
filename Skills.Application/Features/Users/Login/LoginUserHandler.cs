@@ -20,7 +20,7 @@ public sealed class LoginUserHandler(
         var user = await userRepository.GetByUsername(request.Username, cancellationToken)
             ?? throw new AppException("User not found", 404);
         
-        if(hasher.HashPassword(user, request.Password) != user.Password)
+        if(hasher.VerifyHashedPassword(user, user.Password, request.Password) == PasswordVerificationResult.Failed)
             throw new AppException("Incorrect credentials", 401);
         
         return new LoginUserResponse("token muito brabo");
