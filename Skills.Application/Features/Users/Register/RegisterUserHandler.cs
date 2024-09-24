@@ -7,24 +7,18 @@ using Skills.Domain.Entities;
 
 namespace Skills.Application.Features.Users.Register;
 
-public sealed class RegisterUserHandler : IRequestHandler<RegisterUserRequest, RegisterUserReponse>
-{
-    private readonly IUnitOfWork unitOfWork;
-    private readonly IUserRepository userRepository;
-    private readonly IMapper mapper;
-    private readonly PasswordHasher<User> hasher;
-
-    public RegisterUserHandler(
-            IUnitOfWork unitOfWork,
+public sealed class RegisterUserHandler(
+            PasswordHasher<User> passwordHasher,
             IUserRepository userRepository,
-            IMapper mapper,
-            PasswordHasher<User> passwordHasher)
-    {
-        this.unitOfWork = unitOfWork;
-        this.userRepository = userRepository;
-        this.mapper = mapper;
-        this.hasher = passwordHasher;
-    }
+            IUnitOfWork unitOfWork,
+            IMapper mapper) 
+    : IRequestHandler<RegisterUserRequest, RegisterUserReponse>
+{
+    private readonly IUserRepository userRepository = userRepository;
+    private readonly PasswordHasher<User> hasher = passwordHasher;
+    private readonly IUnitOfWork unitOfWork = unitOfWork;
+    private readonly IMapper mapper = mapper;
+
 
     public async Task<RegisterUserReponse> Handle(
             RegisterUserRequest request, 
