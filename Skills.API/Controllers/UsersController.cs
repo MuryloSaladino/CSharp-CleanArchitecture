@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Skills.Application.Features.Users.Login;
 using Skills.Application.Features.Users.Register;
 
 namespace Skills.API.Controllers;
@@ -17,5 +18,12 @@ public class UsersController(IMediator mediator) : ControllerBase
     {
         var response = await mediator.Send(request, cancellationToken);
         return Created("/api/users", response);
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<LoginUserResponse>> LoginUser(LoginUserRequest request, CancellationToken cancellationToken)
+    {
+        var response = await mediator.Send(request, cancellationToken);
+        return Ok(response);
     }
 }
