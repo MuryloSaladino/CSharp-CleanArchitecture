@@ -4,5 +4,5 @@ namespace Skills.Application.Repository.SkillRepository;
 
 public interface ISkillRepository : IBaseRepository<Skill>
 {
-    Task<List<Skill>> GetByUser(Guid userId, CancellationToken cancellationToken);
+    Task<List<Skill>> GetByMinLevel(int level, CancellationToken cancellationToken);
 }
