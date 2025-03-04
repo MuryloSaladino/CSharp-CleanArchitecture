@@ -1,4 +1,4 @@
-using Skills.Application.Repository;
+using Skills.Domain.Repository;
 using Skills.Persistence.Context;
 
 namespace Skills.Persistence.Repository;

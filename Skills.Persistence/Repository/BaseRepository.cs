@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Skills.Application.Repository;
 using Skills.Domain.Common;
+using Skills.Domain.Repository;
 using Skills.Persistence.Context;
 
 namespace Skills.Persistence.Repository;
@@ -9,7 +9,7 @@ public class BaseRepository<TEntity>(SkillsContext skillsContext) : IBaseReposit
     where TEntity : BaseEntity
 {
     protected readonly SkillsContext context = skillsContext;
-
+    private readonly DbSet<TEntity> dbSet = skillsContext.Set<TEntity>();
 
     public void Create(TEntity entity)
         => context.Add(entity);
@@ -27,5 +27,10 @@ public class BaseRepository<TEntity>(SkillsContext skillsContext) : IBaseReposit
     {
         entity.DeletedAt = DateTime.Now;
         context.Update(entity);
+    }
+    
+    public Task<bool> Exists(Guid id, CancellationToken cancellationToken)
+    {
+        return dbSet.AnyAsync(e => EF.Property<Guid>(e, "Id") == id, cancellationToken);
     }
 }
