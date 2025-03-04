@@ -1,7 +1,10 @@
 using Skills.API.Extensions;
 using Skills.Application;
+using Skills.Application.Config;
 using Skills.Persistence;
 using Skills.Persistence.Context;
+
+DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
