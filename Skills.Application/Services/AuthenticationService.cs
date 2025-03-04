@@ -1,27 +1,31 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Skills.Application.Configuration;
+using Skills.Application.Common.Exceptions;
+using Skills.Application.Config;
+using Skills.Domain.Common;
 using Skills.Domain.Contracts;
 
 namespace Skills.Application.Services;
 
-public class AuthenticationService(AppConfiguration appConfiguration) : IAuthenticationService
+public class AuthenticationService : IAuthenticator
 {
-    private readonly AppConfiguration appConfiguration = appConfiguration;
+    public string SecretKey { get; private set; } = DotEnv.Get("SECRET_KEY");
+    public int ExpireHours { get; private set; } = int.Parse(DotEnv.Get("EXPIRE_HOURS"));
 
-    public string GenerateUserToken(string userId)
+    public string GenerateUserToken(string userId, string username)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(appConfiguration.SecretKey);
+        var key = Encoding.ASCII.GetBytes(SecretKey);
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
-            Subject = new ClaimsIdentity([ new Claim("id", userId) ]),
+            Subject = new ClaimsIdentity([ 
+                new Claim("userId", userId),
+                new Claim("username", username), 
+            ]),
             
-            Expires = DateTime.UtcNow.AddHours(appConfiguration.ExpireHours),
+            Expires = DateTime.UtcNow.AddHours(ExpireHours),
             
             SigningCredentials = new(
                 new SymmetricSecurityKey(key), 
@@ -33,28 +37,37 @@ public class AuthenticationService(AppConfiguration appConfiguration) : IAuthent
         return tokenHandler.WriteToken(token);
     }
 
-    public void ConfigureAuthentication(IServiceCollection services)
+    public UserSession ExtractToken(string token)
     {
-        services.AddCors();
-        services.AddControllers();
+        var key = Encoding.ASCII.GetBytes(SecretKey);
+        var tokenHandler = new JwtSecurityTokenHandler();
 
-        var key = Encoding.ASCII.GetBytes(appConfiguration.SecretKey);
-        services.AddAuthentication(x =>
+        var validationParameters = new TokenValidationParameters
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(x =>
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+
+        try
         {
-            x.RequireHttpsMetadata = false;
-            x.SaveToken = true;
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
-        });
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+
+            var userId = principal.FindFirst("userId")?.Value;
+            var username = principal.FindFirst("username")?.Value;
+
+            if (userId == null || username == null)
+                throw new SecurityTokenException("Invalid token: missing claims.");
+
+            return new UserSession(username, userId);
+        }
+        catch
+        {
+            throw new AppException("Invalid token", 401);
+        }
     }
 }
+
