@@ -8,6 +8,6 @@ public sealed class RegisterUserMapper : Profile
     public RegisterUserMapper()
     {
         CreateMap<RegisterUserRequest, User>();
-        CreateMap<User, RegisterUserReponse>();
+        CreateMap<User, RegisterUserResponse>();
     }
 }

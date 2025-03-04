@@ -1,34 +1,34 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Skills.Application.Repository;
-using Skills.Application.Repository.UserRepository;
+using Skills.Domain.Contracts;
 using Skills.Domain.Entities;
+using Skills.Domain.Repository;
+using Skills.Domain.Repository.UsersRepository;
 
 namespace Skills.Application.Features.Users.Register;
 
 public sealed class RegisterUserHandler(
-    PasswordHasher<User> passwordHasher,
-    IUserRepository userRepository,
+    IUsersRepository userRepository,
+    IPasswordEncrypter encrypter,
     IUnitOfWork unitOfWork,
     IMapper mapper
-) : IRequestHandler<RegisterUserRequest, RegisterUserReponse>
+) : IRequestHandler<RegisterUserRequest, RegisterUserResponse>
 {
-    private readonly IUserRepository userRepository = userRepository;
-    private readonly PasswordHasher<User> hasher = passwordHasher;
+    private readonly IUsersRepository userRepository = userRepository;
+    private readonly IPasswordEncrypter encrypter = encrypter;
     private readonly IUnitOfWork unitOfWork = unitOfWork;
     private readonly IMapper mapper = mapper;
 
 
-    public async Task<RegisterUserReponse> Handle(
+    public async Task<RegisterUserResponse> Handle(
         RegisterUserRequest request,
         CancellationToken cancellationToken)
     {
         var user = mapper.Map<User>(request);
-        user.Password = hasher.HashPassword(user, user.Password);
+        user.Password = encrypter.Hash(user);
         userRepository.Create(user);
         await unitOfWork.Save(cancellationToken);
 
-        return mapper.Map<RegisterUserReponse>(user);
+        return mapper.Map<RegisterUserResponse>(user);
     }
 }
