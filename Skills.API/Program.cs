@@ -5,7 +5,7 @@ using Skills.Persistence.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigurePersistence(builder.Configuration);
+builder.Services.ConfigurePersistence();
 builder.Services.ConfigureApplication();
 
 builder.Services.ConfigureCorsPolicy();

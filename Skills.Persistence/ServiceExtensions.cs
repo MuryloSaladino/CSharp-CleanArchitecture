@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Skills.Application.Repository;
-using Skills.Application.Repository.SkillRepository;
-using Skills.Application.Repository.UserRepository;
+using Skills.Application.Config;
+using Skills.Domain.Repository;
+using Skills.Domain.Repository.SkillsRepository;
+using Skills.Domain.Repository.UsersRepository;
 using Skills.Persistence.Context;
 using Skills.Persistence.Repository;
 using Skills.Persistence.Repository.Skills;
@@ -13,12 +14,14 @@ namespace Skills.Persistence;
 
 public static class ServiceExtensions
 {
-    public static void ConfigurePersistence(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigurePersistence(this IServiceCollection services)
     {
-        var connection = configuration.GetConnectionString("SkillsContext");
-        services.AddDbContext<SkillsContext>(opt => opt.UseSqlServer(connection));
+        var connection = DotEnv.Get("DATABASE_URL");
+
+        services.AddDbContext<SkillsContext>(opt => opt.UseNpgsql(connection));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<ISkillRepository, SkillRepository>();
+
+        services.AddScoped<IUsersRepository, UserRepository>();
+        services.AddScoped<ISkillsRepository, SkillRepository>();
     }
 }
