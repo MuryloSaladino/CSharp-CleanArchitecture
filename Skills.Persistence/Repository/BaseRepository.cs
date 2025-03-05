@@ -9,28 +9,38 @@ public class BaseRepository<TEntity>(SkillsContext skillsContext) : IBaseReposit
     where TEntity : BaseEntity
 {
     protected readonly SkillsContext context = skillsContext;
-    private readonly DbSet<TEntity> dbSet = skillsContext.Set<TEntity>();
+    protected readonly DbSet<TEntity> dbSet = skillsContext.Set<TEntity>();
 
     public void Create(TEntity entity)
         => context.Add(entity);
 
     public void Update(TEntity entity)
-        => context.Update(entity);
+    {
+        entity.UpdatedAt = DateTime.UtcNow;
+        context.Update(entity);
+    }
 
     public Task<TEntity?> Get(Guid id, CancellationToken cancellationToken)
-        => context.Set<TEntity>().FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
+        => context
+            .Set<TEntity>()
+            .Where(entity => entity.DeletedAt == null)
+            .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
 
     public Task<List<TEntity>> GetAll(CancellationToken cancellationToken)
-        => context.Set<TEntity>().ToListAsync(cancellationToken);
+        => context
+            .Set<TEntity>()
+            .Where(entity => entity.DeletedAt == null)
+            .ToListAsync(cancellationToken);
 
     public void Delete(TEntity entity)
     {
-        entity.DeletedAt = DateTime.Now;
+        entity.DeletedAt = DateTime.UtcNow;
         context.Update(entity);
     }
     
     public Task<bool> Exists(Guid id, CancellationToken cancellationToken)
-    {
-        return dbSet.AnyAsync(e => EF.Property<Guid>(e, "Id") == id, cancellationToken);
-    }
+        => dbSet.AnyAsync(e => 
+            EF.Property<Guid>(e, "Id") == id && 
+            EF.Property<Guid?>(e, "DeletedAt") == null, 
+        cancellationToken);
 }

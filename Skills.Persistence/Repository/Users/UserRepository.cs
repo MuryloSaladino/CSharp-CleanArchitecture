@@ -15,19 +15,21 @@ public class UserRepository(SkillsContext skillsContext) : BaseRepository<User>(
     public Task<User?> GetWithSkills(Guid id, CancellationToken cancellationToken)
         => context
             .Set<User>()
-            .Include(user => user.Skills)
+            .Include(user => user.Skills.Where(skill => skill.DeletedAt == null))
             .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
 
     public Task<List<User>> GetAllWithSkills(CancellationToken cancellationToken)
         => context
             .Set<User>()
-            .Include(user => user.Skills)
+            .Include(user => user.Skills.Where(skill => skill.DeletedAt == null))
             .ToListAsync(cancellationToken);
 
     public Task<List<User>> GetBySkillName(string skillName, CancellationToken cancellationToken)
         => context
             .Set<User>()
-            .Where(user => user.Skills.Any(skill => skill.Name == skillName))
+            .Where(user => user.Skills.Any(skill => 
+                skill.Name == skillName && 
+                skill.DeletedAt == null))
             .Include(user => user.Skills)
             .ToListAsync(cancellationToken);
 }
