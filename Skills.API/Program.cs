@@ -1,4 +1,5 @@
 using Skills.API.Extensions;
+using Skills.API.Middlewares.Authenticate;
 using Skills.Application;
 using Skills.Application.Config;
 using Skills.Persistence;
@@ -23,6 +24,8 @@ var app = builder.Build();
 var serviceScope = app.Services.CreateScope();
 var dataContext = serviceScope.ServiceProvider.GetService<SkillsContext>();
 dataContext?.Database.EnsureCreated();
+
+app.UseMiddleware<AuthenticationMiddleware>();
 
 app.UseSwagger();
 app.UseSwaggerUI();
