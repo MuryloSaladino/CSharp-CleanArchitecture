@@ -25,13 +25,12 @@ This project follows **Clean Architecture**, ensuring a modular and maintainable
 
 #### 📌 **Domain**  
 - Represents **core business rules** and **entities**.  
-- Defines **interfaces** but does not contain implementations.  
+- Defines **interfaces**, mostly **adapters** for external services.  
 - This layer should remain **independent of external dependencies**. 
 
 #### 📌 **Application**  
-- Contains the **business logic and use cases**.  
-- Uses the **CQRS pattern** (Command Query Responsibility Segregation) to separate read and write operations.  
-- Implements **interfaces** defined in the Domain layer.  
+- Contains the **business logic and use cases** (features).  
+- Implements service **interfaces** defined in the Domain layer.
 
 #### 📌 **Persistence**  
 - Implements **repositories** and interacts with the database.  
@@ -41,7 +40,7 @@ This project follows **Clean Architecture**, ensuring a modular and maintainable
 #### 📌 **API (Presentation)**  
 - The entry point of the application.  
 - Exposes endpoints through **ASP.NET controllers**.  
-- Handles **HTTP requests, authentication, and validation**. 
+- Handles **HTTP requests, authentication, and authorization**. 
 
 ### 🔹 **Key Benefits of Clean Architecture:**  
 ✅ Better **maintainability** and **scalability**.  
