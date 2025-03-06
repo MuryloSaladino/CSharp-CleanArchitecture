@@ -24,7 +24,7 @@ public sealed class LoginHandler(
         if(!encrypter.Matches(user, request.Password)) 
             throw new AppException("Credentials do not match", 401);
         
-        var token = authentication.GenerateUserToken(user.Id.ToString(), user.Username);
+        var token = authentication.GenerateUserToken(user);
 
         return new LoginResponse(token);
     }
