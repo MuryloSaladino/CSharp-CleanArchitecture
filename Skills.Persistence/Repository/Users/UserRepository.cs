@@ -7,6 +7,11 @@ namespace Skills.Persistence.Repository.Users;
 
 public class UserRepository(SkillsContext skillsContext) : BaseRepository<User>(skillsContext), IUsersRepository
 {
+    public Task<bool> ExistsByUsername(string username, CancellationToken cancellationToken)
+        => context
+            .Set<User>()
+            .AnyAsync(user => user.Username == username, cancellationToken);
+
     public Task<User?> GetByUsername(string username, CancellationToken cancellationToken)
         => context
             .Set<User>()
