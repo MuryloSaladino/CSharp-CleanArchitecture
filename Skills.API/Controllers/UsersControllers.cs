@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Skills.API.Middlewares.Authenticate;
 using Skills.Application.Features.Users.Register;
 using Skills.Application.Features.Users.Find;
+using Skills.Application.Features.Users.FindBySkill;
 
 namespace Skills.API.Controllers;
 
@@ -27,6 +28,15 @@ public class UsersController(IMediator mediator) : ControllerBase
         [FromRoute] string id, CancellationToken cancellationToken)
     {
         var response = await mediator.Send(new FindUserRequest(id), cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    [Authenticate]
+    public async Task<ActionResult<List<FindUsersBySkillResponse>>> FindUsersBySkill(
+        [FromQuery] string skillname, CancellationToken cancellationToken)
+    {
+        var response = await mediator.Send(new FindUsersBySkillRequest(skillname), cancellationToken);
         return Ok(response);
     }
 }
