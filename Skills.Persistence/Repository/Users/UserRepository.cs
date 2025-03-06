@@ -28,7 +28,7 @@ public class UserRepository(SkillsContext skillsContext) : BaseRepository<User>(
         => context
             .Set<User>()
             .Where(user => user.Skills.Any(skill => 
-                skill.Name == skillName && 
+                skill.Name.ToLower().Contains(skillName.ToLower()) && 
                 skill.DeletedAt == null))
             .Include(user => user.Skills)
             .ToListAsync(cancellationToken);
