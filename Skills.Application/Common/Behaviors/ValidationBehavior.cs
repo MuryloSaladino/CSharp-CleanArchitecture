@@ -2,6 +2,8 @@ using FluentValidation;
 using MediatR;
 using Skills.Application.Common.Exceptions;
 
+namespace Skills.Application.Common.Behaviors;
+
 public sealed class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) 
     : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
