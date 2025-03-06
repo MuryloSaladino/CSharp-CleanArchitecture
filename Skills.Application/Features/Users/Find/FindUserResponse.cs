@@ -8,5 +8,6 @@ public sealed record FindUserResponse(
     DateTime? UpdatedAt,
     DateTime? DeletedAt,
     string Username,
+    bool IsAdmin,
     List<Skill> Skills
 );

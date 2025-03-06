@@ -6,6 +6,6 @@ public class FindUserValidator : AbstractValidator<FindUserRequest>
 {
     public FindUserValidator()
     {
-        RuleFor(r => r.Id).Must(id => Guid.TryParse(id, out _));
+        RuleFor(u => u.Id).Must(id => Guid.TryParse(id, out _));
     }
 }
