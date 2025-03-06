@@ -22,8 +22,7 @@ public class SkillsController(IMediator mediator) : ControllerBase
         return Created("/skills", response);
     }
 
-    [HttpPut]
-    [Route("{id}")]
+    [HttpPut, Route("{id}")]
     public async Task<ActionResult<EditSkillResponse>> EditSkill(
         [FromRoute] string id, EditSkillRequest request, CancellationToken cancellationToken)
     {
@@ -32,8 +31,7 @@ public class SkillsController(IMediator mediator) : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete]
-    [Route("{id}")]
+    [HttpDelete, Route("{id}")]
     public async Task<ActionResult> DeleteSkill(
         [FromRoute] string id, CancellationToken cancellationToken)
     {

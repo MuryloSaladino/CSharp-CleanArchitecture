@@ -23,8 +23,7 @@ public class UsersController(IMediator mediator) : ControllerBase
         return Created("/users", response);
     }
 
-    [HttpGet]
-    [Route("{id}")]
+    [HttpGet, Route("{id}")]
     [Authenticate]
     public async Task<ActionResult<FindUserResponse>> FindUser(
         [FromRoute] string id, CancellationToken cancellationToken)
