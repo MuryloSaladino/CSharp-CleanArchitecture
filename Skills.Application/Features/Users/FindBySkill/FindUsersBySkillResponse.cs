@@ -5,5 +5,6 @@ public sealed record FindUsersBySkillResponse(
     DateTime CreatedAt,
     DateTime? UpdatedAt,
     DateTime? DeletedAt,
-    string Username
+    string Username,
+    bool IsAdmin
 );
