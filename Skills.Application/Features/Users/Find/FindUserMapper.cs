@@ -3,9 +3,9 @@ using Skills.Domain.Entities;
 
 namespace Skills.Application.Features.Users.Find;
 
-public class CreateUserMapper : Profile
+public class FindUserMapper : Profile
 {
-    public CreateUserMapper()
+    public FindUserMapper()
     {
         CreateMap<User, FindUserResponse>();
     }
