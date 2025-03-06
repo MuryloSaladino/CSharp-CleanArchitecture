@@ -6,6 +6,7 @@ using Skills.Application.Common.Exceptions;
 using Skills.Application.Config;
 using Skills.Domain.Common;
 using Skills.Domain.Contracts;
+using Skills.Domain.Entities;
 
 namespace Skills.Application.Services;
 
@@ -14,15 +15,16 @@ public class AuthenticationService : IAuthenticator
     public string SecretKey { get; private set; } = DotEnv.Get("SECRET_KEY");
     public int ExpireHours { get; private set; } = int.Parse(DotEnv.Get("EXPIRE_HOURS"));
 
-    public string GenerateUserToken(string userId, string username)
+    public string GenerateUserToken(User user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(SecretKey);
         var tokenDescriptor = new SecurityTokenDescriptor()
         {
             Subject = new ClaimsIdentity([ 
-                new Claim("userId", userId),
-                new Claim("username", username), 
+                new Claim("userId", user.Id.ToString()),
+                new Claim("username", user.Username), 
+                new Claim("isAdmin", user.IsAdmin.ToString())
             ]),
             
             Expires = DateTime.UtcNow.AddHours(ExpireHours),
@@ -58,11 +60,12 @@ public class AuthenticationService : IAuthenticator
 
             var userId = principal.FindFirst("userId")?.Value;
             var username = principal.FindFirst("username")?.Value;
+            var isAdmin = bool.Parse( principal.FindFirst("isAdmin")?.Value ?? "False" );
 
-            if (userId == null || username == null)
+            if(userId == null || username == null)
                 throw new SecurityTokenException("Invalid token: missing claims.");
 
-            return new UserSession(username, userId);
+            return new UserSession(username, userId, isAdmin);
         }
         catch
         {
