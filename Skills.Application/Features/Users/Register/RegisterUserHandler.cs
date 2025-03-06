@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Skills.Application.Common.Exceptions;
 using Skills.Domain.Contracts;
 using Skills.Domain.Entities;
 using Skills.Domain.Repository;
@@ -24,6 +25,9 @@ public sealed class RegisterUserHandler(
         RegisterUserRequest request,
         CancellationToken cancellationToken)
     {
+        bool exists = await userRepository.ExistsByUsername(request.Username, cancellationToken);
+        if(exists) throw new AppException("Username already taken", 400);
+
         var user = mapper.Map<User>(request);
         user.Password = encrypter.Hash(user);
         userRepository.Create(user);

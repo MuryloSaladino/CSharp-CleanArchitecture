@@ -2,5 +2,9 @@ namespace Skills.Application.Features.Users.Register;
 
 public sealed record RegisterUserResponse(
     string Id,
-    string Username
+    DateTime CreatedAt,
+    DateTime? UpdatedAt,
+    DateTime? DeletedAt,
+    string Username,
+    bool IsAdmin
 );
