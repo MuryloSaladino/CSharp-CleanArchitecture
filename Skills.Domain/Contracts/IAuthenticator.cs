@@ -1,9 +1,9 @@
-using Skills.Domain.Common;
 using Skills.Domain.Entities;
 
 namespace Skills.Domain.Contracts;
 
-public interface IAuthenticator {
-    string GenerateUserToken(User user);
-    UserSession ExtractToken(string token);
+public interface IAuthenticator
+{
+    string GenerateToken(User user);
+    Task<User> ExtractUserFromToken(string token, CancellationToken cancellationToken);
 }
