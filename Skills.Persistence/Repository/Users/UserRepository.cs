@@ -1,40 +1,28 @@
 using Microsoft.EntityFrameworkCore;
 using Skills.Domain.Entities;
-using Skills.Domain.Repository.UsersRepository;
+using Skills.Domain.Repository.Users;
 using Skills.Persistence.Context;
 
 namespace Skills.Persistence.Repository.Users;
 
-public class UserRepository(SkillsContext skillsContext) : BaseRepository<User>(skillsContext), IUsersRepository
+public class UserRepository(
+    SkillsContext context
+) : BaseRepository<User>(context), IUsersRepository
 {
     public Task<bool> ExistsByUsername(string username, CancellationToken cancellationToken)
-        => context
-            .Set<User>()
-            .AnyAsync(user => user.Username == username, cancellationToken);
-
-    public Task<User?> GetByUsername(string username, CancellationToken cancellationToken)
-        => context
-            .Set<User>()
-            .FirstOrDefaultAsync(user => user.Username == username, cancellationToken);
-
-    public Task<User?> GetWithSkills(Guid id, CancellationToken cancellationToken)
-        => context
-            .Set<User>()
-            .Include(user => user.Skills.Where(skill => skill.DeletedAt == null))
-            .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
-
-    public Task<List<User>> GetAllWithSkills(CancellationToken cancellationToken)
-        => context
-            .Set<User>()
-            .Include(user => user.Skills.Where(skill => skill.DeletedAt == null))
-            .ToListAsync(cancellationToken);
+        => Context.Set<User>()
+            .Where(user => user.Username == username)
+            .AnyAsync(cancellationToken);
 
     public Task<List<User>> GetBySkillName(string skillName, CancellationToken cancellationToken)
-        => context
-            .Set<User>()
-            .Where(user => user.Skills.Any(skill => 
-                skill.Name.ToLower().Contains(skillName.ToLower()) && 
-                skill.DeletedAt == null))
-            .Include(user => user.Skills)
+        => Context.Set<User>()
+            .Where(user => user.DeletedAt == null)
+            .Where(user => user.Skills.Any(skill => skill.Skill.Name == skillName))
             .ToListAsync(cancellationToken);
+
+    public Task<User?> GetByUsername(string username, CancellationToken cancellationToken)
+        => Context.Set<User>()
+            .Where(user => user.DeletedAt == null)
+            .Where(user => user.Username == username)
+            .FirstOrDefaultAsync(cancellationToken);
 }

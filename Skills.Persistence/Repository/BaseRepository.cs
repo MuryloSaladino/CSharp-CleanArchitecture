@@ -1,46 +1,47 @@
 using Microsoft.EntityFrameworkCore;
-using Skills.Domain.Common;
+using Skills.Domain.Entities;
 using Skills.Domain.Repository;
 using Skills.Persistence.Context;
 
 namespace Skills.Persistence.Repository;
 
-public class BaseRepository<TEntity>(SkillsContext skillsContext) : IBaseRepository<TEntity>
-    where TEntity : BaseEntity
+public class BaseRepository<TEntity>(
+    SkillsContext context
+) : IBaseRepository<TEntity> where TEntity : BaseEntity
 {
-    protected readonly SkillsContext context = skillsContext;
-    protected readonly DbSet<TEntity> dbSet = skillsContext.Set<TEntity>();
+    protected SkillsContext Context = context;
 
     public void Create(TEntity entity)
-        => context.Add(entity);
+    {
+        Context.Add(entity);
+    }
 
     public void Update(TEntity entity)
     {
         entity.UpdatedAt = DateTime.UtcNow;
-        context.Update(entity);
+        Context.Update(entity);
     }
-
-    public Task<TEntity?> Get(Guid id, CancellationToken cancellationToken)
-        => context
-            .Set<TEntity>()
-            .Where(entity => entity.DeletedAt == null)
-            .FirstOrDefaultAsync(entity => entity.Id == id, cancellationToken);
-
-    public Task<List<TEntity>> GetAll(CancellationToken cancellationToken)
-        => context
-            .Set<TEntity>()
-            .Where(entity => entity.DeletedAt == null)
-            .ToListAsync(cancellationToken);
 
     public void Delete(TEntity entity)
     {
         entity.DeletedAt = DateTime.UtcNow;
-        context.Update(entity);
+        Context.Update(entity);
     }
-    
+
+    public Task<TEntity?> Find(Guid id, CancellationToken cancellationToken)
+        => Context.Set<TEntity>()
+            .Where(entity => entity.DeletedAt == null)
+            .Where(entity => entity.Id == id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+    public Task<List<TEntity>> Find(CancellationToken cancellationToken)
+        => Context.Set<TEntity>()
+            .Where(entity => entity.DeletedAt == null)
+            .ToListAsync(cancellationToken);
+
     public Task<bool> Exists(Guid id, CancellationToken cancellationToken)
-        => dbSet.AnyAsync(e => 
-            EF.Property<Guid>(e, "Id") == id && 
-            EF.Property<Guid?>(e, "DeletedAt") == null, 
-        cancellationToken);
+        => Context.Set<TEntity>()
+            .Where(entity => entity.DeletedAt == null)
+            .Where(entity => entity.Id == id)
+            .AnyAsync(cancellationToken);
 }
