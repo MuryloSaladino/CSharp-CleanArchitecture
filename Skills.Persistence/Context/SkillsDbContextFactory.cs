@@ -1,17 +1,21 @@
+using dotenv.net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Skills.Application.Config;
+using Microsoft.IdentityModel.Protocols.Configuration;
 
 namespace Skills.Persistence.Context;
 
-public class XpricefyDbContextFactory : IDesignTimeDbContextFactory<SkillsContext>
+public class SkillsDbContextFactory : IDesignTimeDbContextFactory<SkillsContext>
 {
     public SkillsContext CreateDbContext(string[] args)
     {
-        DotEnv.Load();
+        DotEnv.Load(options: new DotEnvOptions(envFilePaths: ["../.env"]));
 
+        var dbUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
+            ?? throw new InvalidConfigurationException("Missing \"DATABASE_URL\" environment variable");
         var optionsBuilder = new DbContextOptionsBuilder<SkillsContext>();
-        optionsBuilder.UseNpgsql(DotEnv.Get("DATABASE_URL"));
+
+        optionsBuilder.UseNpgsql(dbUrl);
 
         return new SkillsContext(optionsBuilder.Options);
     }
