@@ -1,16 +1,13 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Skills.API.Middlewares.Authenticate;
-using Skills.Application.Features.Users.Register;
-using Skills.Application.Features.Users.Find;
-using Skills.Application.Features.Users.FindBySkill;
-using Skills.API.Middlewares.Authorize;
-using Skills.Application.Features.Users.Promote;
+using Skills.Application.Usecases.Users.Register;
+using Skills.Application.Usecases.Users.Find;
+using Skills.Application.Usecases.Users.FindBySkill;
+using Skills.API.Constants;
 
 namespace Skills.API.Controllers;
 
-[ApiController]
-[Route("/users")]
+[ApiController, Route(APIRoutes.Users)]
 public class UsersController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator mediator = mediator;
@@ -20,33 +17,22 @@ public class UsersController(IMediator mediator) : ControllerBase
         RegisterUserRequest request, CancellationToken cancellationToken)
     {
         var response = await mediator.Send(request, cancellationToken);
-        return Created("/users", response);
+        return Created(APIRoutes.Users, response);
     }
 
     [HttpGet, Route("{id}")]
-    [Authenticate]
     public async Task<ActionResult<FindUserResponse>> FindUser(
-        [FromRoute] string id, CancellationToken cancellationToken)
+        [FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var response = await mediator.Send(new FindUserRequest(id), cancellationToken);
         return Ok(response);
     }
 
     [HttpGet]
-    [Authenticate, Authorize]
     public async Task<ActionResult<List<FindUsersBySkillResponse>>> FindUsersBySkill(
-        [FromQuery] string? skillname, CancellationToken cancellationToken)
+        [FromQuery] FindUsersBySkillRequest request, CancellationToken cancellationToken)
     {
-        var response = await mediator.Send(new FindUsersBySkillRequest(skillname ?? ""), cancellationToken);
-        return Ok(response);
-    }
-
-    [HttpPost, Route("promote/{id}")]
-    [Authenticate, Authorize]
-    public async Task<ActionResult<PromoteUserResponse>> PromoteUser(
-        [FromRoute] string id, CancellationToken cancellationToken)
-    {
-        var response = await mediator.Send(new PromoteUserRequest(id), cancellationToken);
+        var response = await mediator.Send(request, cancellationToken);
         return Ok(response);
     }
 }
