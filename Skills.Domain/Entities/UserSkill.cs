@@ -1,4 +1,4 @@
-using Skills.Domain.Common.Enums;
+using Skills.Domain.Enums;
 
 namespace Skills.Domain.Entities;
 

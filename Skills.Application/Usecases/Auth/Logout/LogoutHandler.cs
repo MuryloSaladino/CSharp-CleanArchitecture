@@ -1,4 +1,4 @@
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 using MediatR;
 using Skills.Domain.Repository.Users;
 using Skills.Application.Validation;

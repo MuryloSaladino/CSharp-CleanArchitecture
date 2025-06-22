@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Skills.Domain.Entities;
 using Microsoft.IdentityModel.Protocols.Configuration;
 using Skills.Domain.Contracts;
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 using Skills.Domain.Repository.Users;
 
 namespace Skills.API.Services;

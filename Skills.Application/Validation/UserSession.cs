@@ -1,4 +1,4 @@
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 using Skills.Domain.Entities;
 
 namespace Skills.Application.Validation;

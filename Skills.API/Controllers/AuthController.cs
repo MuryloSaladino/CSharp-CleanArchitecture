@@ -4,7 +4,7 @@ using Skills.API.Constants;
 using Skills.Application.Usecases.Auth.Login;
 using Skills.Application.Usecases.Auth.Logout;
 using Skills.Application.Usecases.Auth.RefreshTokens;
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 
 namespace Skills.API.Controllers;
 

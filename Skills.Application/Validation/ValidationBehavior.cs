@@ -1,6 +1,6 @@
 using FluentValidation;
 using MediatR;
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 
 namespace Skills.Application.Validation;
 

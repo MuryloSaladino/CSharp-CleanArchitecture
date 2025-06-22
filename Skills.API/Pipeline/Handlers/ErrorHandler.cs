@@ -1,6 +1,6 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 
 namespace Skills.API.Pipeline.Handlers;
 

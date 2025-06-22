@@ -1,4 +1,4 @@
-namespace Skills.Domain.Common.Enums;
+namespace Skills.Domain.Enums;
 
 public enum SkillLevel
 {

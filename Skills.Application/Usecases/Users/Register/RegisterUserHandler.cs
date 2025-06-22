@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 using Skills.Domain.Contracts;
 using Skills.Domain.Entities;
 using Skills.Domain.Repository;

@@ -1,6 +1,6 @@
 using AutoMapper;
 using MediatR;
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 using Skills.Domain.Repository.Users;
 
 namespace Skills.Application.Usecases.Users.Find;

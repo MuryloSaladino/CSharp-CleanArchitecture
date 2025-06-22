@@ -1,5 +1,5 @@
 using MediatR;
-using Skills.Domain.Common.Exceptions;
+using Skills.Domain.Exceptions;
 using Skills.Domain.Repository.Users;
 using Skills.Domain.Contracts;
 using Skills.Domain.Repository;
