@@ -1,4 +1,4 @@
-using Skills.Domain.Entities;
+using Skills.Domain.Common;
 
 namespace Skills.Domain.Repository;
 
