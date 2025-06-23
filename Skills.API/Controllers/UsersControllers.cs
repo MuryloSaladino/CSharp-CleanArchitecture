@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Skills.Application.Usecases.Users.Register;
-using Skills.Application.Usecases.Users.Find;
-using Skills.Application.Usecases.Users.FindBySkill;
+using Skills.Application.Users.Register;
+using Skills.Application.Users.Find;
+using Skills.Application.Users.FindBySkill;
 using Skills.API.Constants;
 
 namespace Skills.API.Controllers;
