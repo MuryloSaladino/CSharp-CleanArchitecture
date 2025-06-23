@@ -1,9 +1,9 @@
 using System.Reflection;
 using MediatR;
 using Skills.Domain.Identity;
-using Skills.Domain.Exceptions;
 using Skills.Domain.Repository.RefreshTokens;
 using Skills.Domain.Repository;
+using Skills.Application.Common.Exceptions;
 
 namespace Skills.Application.Common.Behaviors;
 
@@ -33,7 +33,7 @@ public class AuthenticationBehavior<TRequest, TResponse>(
                 var tokenPayload = tokenAuthenticator.Extract(accessToken);
 
                 if (authAttribute.AdminOnly && !tokenPayload.IsAdmin)
-                    throw new AppException(ExceptionCode.Forbidden, ExceptionMessages.Forbidden.Admin);
+                    throw new NotAdminException();
 
                 session.UserId = tokenPayload.UserId;
             }
@@ -41,16 +41,16 @@ public class AuthenticationBehavior<TRequest, TResponse>(
             else
             {
                 if (session.RefreshToken is null)
-                    throw new AppException(ExceptionCode.Unauthorized, ExceptionMessages.Unauthorized.Default);
+                    throw new AuthenticationException("Refresh token not provided.");
 
                 var refreshTokenEntity = await refreshTokensRepository.Find(session.RefreshToken, cancellationToken)
-                    ?? throw new AppException(ExceptionCode.Unauthorized, ExceptionMessages.Unauthorized.RefreshToken);
+                    ?? throw new AuthenticationException("Invalid Refresh token.");
 
                 if (refreshTokenEntity.ExpiresAt < DateTime.UtcNow)
-                    throw new AppException(ExceptionCode.Unauthorized, ExceptionMessages.Unauthorized.RefreshToken);
+                    throw new AuthenticationException("Expired Refresh token.");
 
                 if (authAttribute.AdminOnly && !refreshTokenEntity.User.IsAdmin)
-                    throw new AppException(ExceptionCode.Forbidden, ExceptionMessages.Forbidden.Admin);
+                    throw new NotAdminException();
 
                 refreshTokenEntity.Rotate();
                 await unitOfWork.Save(cancellationToken);

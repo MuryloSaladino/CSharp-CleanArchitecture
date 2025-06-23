@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
-using Skills.Domain.Exceptions;
+using Skills.Domain.Entities;
+using Skills.Domain.Repository;
 using Skills.Domain.Repository.Users;
 
 namespace Skills.Application.Users.Find;
@@ -14,7 +15,7 @@ public sealed class FindUserHandler(
         FindUserRequest request, CancellationToken cancellationToken)
     {
         var user = await userRepository.Find(request.UserId, cancellationToken)
-            ?? throw new AppException(ExceptionCode.NotFound, ExceptionMessages.NotFound.User);
+            ?? throw new EntityNotFoundException<User>();
 
         return mapper.Map<FindUserResponse>(user);
     }

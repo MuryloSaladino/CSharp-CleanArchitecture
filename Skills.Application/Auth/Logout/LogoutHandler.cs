@@ -1,4 +1,3 @@
-using Skills.Domain.Exceptions;
 using MediatR;
 using Skills.Domain.Identity;
 using Skills.Domain.Repository.RefreshTokens;

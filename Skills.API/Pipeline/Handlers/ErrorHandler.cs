@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
-using Skills.Domain.Exceptions;
+using Skills.Domain.Common;
+using Skills.Domain.Enums;
 
 namespace Skills.API.Pipeline.Handlers;
 
@@ -16,13 +17,13 @@ public static class ErrorHandlerExtensions
 
                 var statusCode = contextFeature.Error switch
                 {
-                    AppException appError => appError.StatusCode,
-                    _ => ExceptionCode.InternalServerError
+                    BaseException appError => appError.StatusCode,
+                    _ => ExceptionCode.InternalServerError,
                 };
                 var message = contextFeature.Error switch
                 {
-                    AppException appError => appError.Message,
-                    _ => "Internal Server Error"
+                    BaseException appError => appError.Message,
+                    _ => "Internal Server Error",
                 };
 
                 context.Response.Headers.Append("Access-Control-Allow-Origin", "*");

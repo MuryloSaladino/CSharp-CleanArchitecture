@@ -1,6 +1,5 @@
 using AutoMapper;
 using MediatR;
-using Skills.Domain.Exceptions;
 using Skills.Domain.Identity;
 using Skills.Domain.Entities;
 using Skills.Domain.Repository;
@@ -20,7 +19,7 @@ public sealed class RegisterUserHandler(
         CancellationToken cancellationToken)
     {
         bool exists = await userRepository.ExistsByUsername(request.Username, cancellationToken);
-        if(exists) throw new AppException(ExceptionCode.BadRequest, ExceptionMessages.BadRequest.ValueAlreadyTaken);
+        if(exists) throw new DuplicatedEntityException<User>(u => u.Username);
 
         var user = mapper.Map<User>(request);
         user.Password = encrypter.Hash(user.Password);

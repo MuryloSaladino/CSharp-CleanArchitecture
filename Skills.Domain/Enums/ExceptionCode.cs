@@ -1,4 +1,4 @@
-namespace Skills.Domain.Exceptions;
+namespace Skills.Domain.Enums;
 
 public enum ExceptionCode
 {

@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols.Configuration;
 using Skills.Domain.Identity;
-using Skills.Domain.Exceptions;
+using System.Security.Authentication;
 
 namespace Skills.Infrastructure.Identity.Services;
 
@@ -71,11 +71,7 @@ public class TokenAuthenticator : ITokenAuthenticator
         }
         catch (Exception ex)
         {
-            throw new AppException(
-                ExceptionCode.Unauthorized,
-                ExceptionMessages.Unauthorized.Default,
-                ex.Message
-            );
+            throw new AuthenticationException(ex.Message);
         }
     }
 }

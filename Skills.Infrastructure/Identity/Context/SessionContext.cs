@@ -1,5 +1,5 @@
+using Skills.Application.Common.Exceptions;
 using Skills.Domain.Identity;
-using Skills.Domain.Exceptions;
 
 namespace Skills.Infrastructure.Identity.Context;
 
@@ -9,7 +9,7 @@ public class SessionContext : ISessionContext
 
     public Guid UserId
     {
-        get => _userId ?? throw new AppException(ExceptionCode.Unauthorized, ExceptionMessages.Unauthorized.Session);
+        get => _userId ?? throw new AuthenticationException("Invalid session, login needed.");
         set => _userId = value;
     }
     public string? AccessToken { get; set; }

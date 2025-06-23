@@ -1,10 +1,10 @@
 using MediatR;
-using Skills.Domain.Exceptions;
 using Skills.Domain.Repository.Users;
 using Skills.Domain.Identity;
 using Skills.Domain.Repository.RefreshTokens;
 using Skills.Domain.Entities;
 using Skills.Domain.Repository;
+using Skills.Application.Common.Exceptions;
 
 namespace Skills.Application.Auth.Login;
 
@@ -21,10 +21,10 @@ public sealed class LoginHandler(
         LoginRequest request, CancellationToken cancellationToken)
     {
         var user = await userRepository.FindByUsername(request.Username, cancellationToken)
-            ?? throw new AppException(ExceptionCode.NotFound, ExceptionMessages.NotFound.User);
+            ?? throw new EntityNotFoundException<User>();
         
         if(!encrypter.Matches(user.Password, request.Password)) 
-            throw new AppException(ExceptionCode.Unauthorized, ExceptionMessages.Unauthorized.Credentials);
+            throw new AuthenticationException("Incorrect password or invalid credentials.");
 
         var refreshToken = await refreshTokensRepository.Find(user.Id, cancellationToken)
             ?? RefreshToken.FromUser(user);
