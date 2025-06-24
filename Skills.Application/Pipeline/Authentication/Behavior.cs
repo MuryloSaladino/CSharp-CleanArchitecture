@@ -42,7 +42,7 @@ public class AuthenticationBehavior<TRequest, TResponse>(
                 if (session.RefreshToken is null)
                     throw new AuthenticationException("Refresh token not provided.");
 
-                var refreshTokenEntity = await refreshTokensRepository.Find(session.RefreshToken, cancellationToken)
+                var refreshTokenEntity = await refreshTokensRepository.FindOneByTokenValue(session.RefreshToken, cancellationToken)
                     ?? throw new AuthenticationException("Invalid Refresh token.");
 
                 if (refreshTokenEntity.ExpiresAt < DateTime.UtcNow)

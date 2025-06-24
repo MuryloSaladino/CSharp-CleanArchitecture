@@ -12,7 +12,7 @@ public class DeleteSkillHandler(
 {
     public async Task Handle(DeleteSkillRequest request, CancellationToken cancellationToken)
     {
-        var skill = await skillsRepository.Find(request.SkillId, cancellationToken)
+        var skill = await skillsRepository.FindOne(request.SkillId, cancellationToken)
             ?? throw new EntityNotFoundException<Skill>();
 
         skillsRepository.Delete(skill);

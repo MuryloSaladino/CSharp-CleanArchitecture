@@ -4,5 +4,5 @@ namespace Skills.Domain.Repository.Skills;
 
 public interface ISkillsRepository : IBaseRepository<Skill>
 {
-    Task<List<Skill>> FindByName(string name, CancellationToken cancellationToken);
+    Task<List<Skill>> FindManyByName(string name, CancellationToken cancellationToken);
 }

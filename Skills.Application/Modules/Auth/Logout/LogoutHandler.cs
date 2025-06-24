@@ -16,7 +16,7 @@ public class LogoutHandler(
     {
         if (session.RefreshToken is string token)
         {
-            var refreshToken = await refreshTokensRepository.Find(token, cancellationToken);
+            var refreshToken = await refreshTokensRepository.FindOneByTokenValue(token, cancellationToken);
             refreshToken?.Invalidate();
             await unitOfWork.Save(cancellationToken);
         }

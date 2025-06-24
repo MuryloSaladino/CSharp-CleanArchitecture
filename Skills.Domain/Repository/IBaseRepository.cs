@@ -8,7 +8,7 @@ public interface IBaseRepository<TEntity>
     void Create(TEntity entity);
     void Update(TEntity entity);
     void Delete(TEntity entity);
+    Task<TEntity?> FindOne(Guid id, CancellationToken cancellationToken);
+    Task<List<TEntity>> FindMany(CancellationToken cancellationToken);
     Task<bool> Exists(Guid id, CancellationToken cancellationToken);
-    Task<TEntity?> Find(Guid id, CancellationToken cancellationToken);
-    Task<List<TEntity>> Find(CancellationToken cancellationToken);
 }

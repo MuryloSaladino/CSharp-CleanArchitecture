@@ -28,20 +28,19 @@ public class BaseRepository<TEntity>(
         Context.Update(entity);
     }
 
-    public Task<TEntity?> Find(Guid id, CancellationToken cancellationToken)
+    public Task<TEntity?> FindOne(Guid id, CancellationToken cancellationToken)
         => Context.Set<TEntity>()
             .Where(entity => entity.DeletedAt == null)
             .Where(entity => entity.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
 
-    public Task<List<TEntity>> Find(CancellationToken cancellationToken)
+    public Task<List<TEntity>> FindMany(CancellationToken cancellationToken)
         => Context.Set<TEntity>()
             .Where(entity => entity.DeletedAt == null)
             .ToListAsync(cancellationToken);
 
     public Task<bool> Exists(Guid id, CancellationToken cancellationToken)
         => Context.Set<TEntity>()
-            .Where(entity => entity.DeletedAt == null)
             .Where(entity => entity.Id == id)
             .AnyAsync(cancellationToken);
 }

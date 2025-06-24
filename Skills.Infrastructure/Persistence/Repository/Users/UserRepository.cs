@@ -20,7 +20,7 @@ public class UserRepository(
             .Where(user => string.IsNullOrEmpty(skillName) || user.Skills.Any(skill => skill.Skill.Name == skillName))
             .ToListAsync(cancellationToken);
 
-    public Task<User?> FindByUsername(string username, CancellationToken cancellationToken)
+    public Task<User?> FindOneByUsername(string username, CancellationToken cancellationToken)
         => Context.Set<User>()
             .Where(user => user.DeletedAt == null)
             .Where(user => user.Username == username)
