@@ -2,7 +2,8 @@ using System.Reflection;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Skills.Application.Common.Behaviors;
+using Skills.Application.Pipeline.Authentication;
+using Skills.Application.Pipeline.Validation;
 
 namespace Skills.Application;
 

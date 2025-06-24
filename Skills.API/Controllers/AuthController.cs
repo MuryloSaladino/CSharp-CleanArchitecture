@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Skills.API.Constants;
-using Skills.Application.Auth.Login;
-using Skills.Application.Auth.Logout;
+using Skills.Application.Modules.Auth.Login;
+using Skills.Application.Modules.Auth.Logout;
 
 namespace Skills.API.Controllers;
 
