@@ -1,8 +1,8 @@
 using Skills.Domain.Entities;
 
-namespace Skills.Application.Modules.Users.FindBySkill;
+namespace Skills.Application.Modules.Users.FindAll;
 
-public sealed record FindUsersBySkillResponse(
+public sealed record FindAllUsersResponse(
     string Id,
     DateTime CreatedAt,
     DateTime UpdatedAt,

@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Skills.Application.Modules.Users.Register;
 using Skills.Application.Modules.Users.Find;
-using Skills.Application.Modules.Users.FindBySkill;
+using Skills.Application.Modules.Users.FindAll;
 using Skills.API.Constants;
 
 namespace Skills.API.Controllers;
@@ -29,8 +29,8 @@ public class UsersController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<FindUsersBySkillResponse>>> FindUsersBySkill(
-        [FromQuery] FindUsersBySkillRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<FindAllUsersResponse>>> FindUsersBySkill(
+        [FromQuery] FindAllUsersRequest request, CancellationToken cancellationToken)
     {
         var response = await mediator.Send(request, cancellationToken);
         return Ok(response);
