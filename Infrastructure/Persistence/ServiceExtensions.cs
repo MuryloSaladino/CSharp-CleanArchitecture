@@ -16,11 +16,10 @@ using Infrastructure.Persistence.Seeding;
 
 namespace Infrastructure.Persistence;
 
-public static class PersistenceConfiguration
+public static class ServiceExtensions
 {
     public static void ConfigurePersistence(this IServiceCollection services)
     {
-
         services.AddDbContext<SkillsContext>(opt =>
         {
             var dbUrl = Environment.GetEnvironmentVariable("DATABASE_URL")

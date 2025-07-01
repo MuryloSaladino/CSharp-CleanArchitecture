@@ -5,7 +5,7 @@ using Infrastructure.Identity.Services;
 
 namespace Infrastructure.Identity;
 
-public static class IdentityConfiguration
+public static class ServiceExtensions
 {
     public static void ConfigureIdentity(this IServiceCollection services)
     {
