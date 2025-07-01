@@ -4,10 +4,9 @@ using Web.API.Pipeline.Cors;
 using Web.API.Pipeline.Handlers;
 using Web.API.Pipeline.Middlewares;
 using Application;
-using Infrastructure.Identity;
-using Infrastructure.Persistence;
 using Infrastructure.Persistence.Context;
 using Infrastructure.Persistence.Seeding;
+using Infrastructure;
 
 DotEnv.Load(options: new DotEnvOptions(envFilePaths: ["../.env"]));
 
@@ -15,8 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // LAYERS CONFIG
 builder.Services.ConfigureApplication();
-builder.Services.ConfigurePersistence();
-builder.Services.ConfigureIdentity();
+builder.Services.ConfigureInfrastructure();
 
 // CORS
 builder.Services.ConfigureCorsPolicy();
