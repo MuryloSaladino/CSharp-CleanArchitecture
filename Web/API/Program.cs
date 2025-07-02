@@ -17,7 +17,7 @@ builder.Services.ConfigureApplication();
 builder.Services.ConfigureInfrastructure();
 
 // CORS
-builder.Services.ConfigureCorsPolicy();
+builder.Services.ConfigureCorsPolicy(builder.Configuration);
 
 // CONTROLLERS AND OPTIONS
 builder.Services.AddControllers().AddJsonOptions(op =>

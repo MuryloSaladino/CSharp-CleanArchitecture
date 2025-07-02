@@ -2,9 +2,9 @@ namespace Web.API.Pipeline.Cors;
 
 public static class CorsPolicyExtensions
 {
-    public static void ConfigureCorsPolicy(this IServiceCollection services)
+    public static void ConfigureCorsPolicy(this IServiceCollection services, IConfiguration configuration)
     {
-        string corsOriginsConfig = Environment.GetEnvironmentVariable("CORS_ORIGINS") ?? "";
+        string corsOriginsConfig = configuration["AppSettings:CorsOrigins"] ?? "";
         string[] origins = corsOriginsConfig.Split(",");
 
         services.AddCors(opt =>
