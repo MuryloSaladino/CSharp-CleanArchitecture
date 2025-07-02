@@ -8,7 +8,7 @@ using Infrastructure.Persistence.Context;
 using Infrastructure.Persistence.Seeding;
 using Infrastructure;
 
-DotEnv.Load(options: new DotEnvOptions(envFilePaths: ["../.env"]));
+DotEnv.Load(options: new DotEnvOptions(envFilePaths: ["../../.env"]));
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +41,6 @@ dataContext.Database.EnsureCreated();
 await dataContext.SeedAdmin();
 
 app.UseMiddleware<SessionMiddleware>();
-app.UsePathBase("/api");
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors();
