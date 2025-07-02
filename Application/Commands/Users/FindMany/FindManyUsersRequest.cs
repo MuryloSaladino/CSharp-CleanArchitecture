@@ -4,6 +4,6 @@ using Domain.Repository.Users;
 
 namespace Application.Commands.Users.FindMany;
 
-[Authenticate(AdminOnly = true)]
+[Authenticate]
 public sealed record FindManyUsersRequest
     : UserFilter, IRequest<List<FindManyUsersResponse>>;
