@@ -41,6 +41,7 @@ dataContext.Database.EnsureCreated();
 await dataContext.SeedAdmin();
 
 app.UseMiddleware<SessionMiddleware>();
+app.UsePathBase("/api");
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors();
