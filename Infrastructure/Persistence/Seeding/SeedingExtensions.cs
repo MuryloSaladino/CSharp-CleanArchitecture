@@ -1,20 +1,18 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.Configuration;
 using Domain.Entities;
+using Application.Configuration;
 
 namespace Infrastructure.Persistence.Seeding;
 
 public static class SeedingExtensions
 {
-    public static async Task SeedAdmin(this DbContext context)
+    public static async Task SeedAdmin(this DbContext context, IAppConfiguration appConfig)
     {
-        var userSet = context.Set<User>();
-        var username = Environment.GetEnvironmentVariable("ADMIN_USERNAME")
-            ?? throw new InvalidConfigurationException("Missing \"ADMIN_USERNAME\" environment variable");
-        var password = Environment.GetEnvironmentVariable("ADMIN_PASSWORD")
-            ?? throw new InvalidConfigurationException("Missing \"ADMIN_PASSWORD\" environment variable");
+        var username = appConfig.GetSecret("ADMIN_USERNAME");
+        var password = appConfig.GetSecret("ADMIN_PASSWORD");
         var hasher = new PasswordHasher<User>();
+        var userSet = context.Set<User>();
 
         var adminUser = await userSet
             .Where(u => u.Username == username)

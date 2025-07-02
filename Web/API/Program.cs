@@ -37,8 +37,7 @@ var serviceScope = app.Services.CreateScope();
 var dataContext = serviceScope.ServiceProvider.GetService<SkillsContext>()
     ?? throw new InvalidOperationException("Failed to resolve SkillsContext from service provider.");
 
-dataContext.Database.EnsureCreated();
-await dataContext.SeedAdmin();
+await dataContext.Database.EnsureCreatedAsync();
 
 app.UseMiddleware<SessionMiddleware>();
 app.UseSwagger();
