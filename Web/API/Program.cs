@@ -5,7 +5,6 @@ using Web.API.Pipeline.Handlers;
 using Web.API.Pipeline.Middlewares;
 using Application;
 using Infrastructure.Persistence.Context;
-using Infrastructure.Persistence.Seeding;
 using Infrastructure;
 
 DotEnv.Load(options: new DotEnvOptions(envFilePaths: ["../../.env"]));
